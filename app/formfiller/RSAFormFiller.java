@@ -516,7 +516,7 @@ public class RSAFormFiller extends FormFiller {
         String checkboxNationalite = nationaliteCheckboxes.get(individu.role).get(individu.nationalite);
         checkbox(checkboxNationalite);
 
-        if (null != individu.nir) {
+        if (StringUtils.length(individu.nir) >= 15) {
             appendNumber(String.format("%s.nir", fieldPrefix), individu.nir.substring(0, 13));
             appendNumber(String.format("%s.nir2", fieldPrefix), individu.nir.substring(13, 15));
         }
@@ -548,7 +548,7 @@ public class RSAFormFiller extends FormFiller {
             fieldPrefix = "enfant." + enfantIndex;
             break;
         default:
-            throw new RuntimeException();
+            throw new RuntimeException(String.format("Individu de role inconnu"));
         }
 
         return fieldPrefix;
