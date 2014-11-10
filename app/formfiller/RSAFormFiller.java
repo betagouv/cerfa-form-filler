@@ -9,12 +9,9 @@ import models.Individu.Nationalite;
 import models.Individu.StatutMarital;
 import models.Logement.Adresse;
 import models.Logement.LogementType;
-import models.Ressource.RessourcePeriode;
-import models.Ressource.RessourceType;
 import models.SituationPro;
 import models.SituationPro.SalarieContractType;
 import models.SituationPro.SituationProType;
-import models.SituationService;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -62,8 +59,8 @@ public class RSAFormFiller extends FormFiller {
         {"enceinte.oui", 1, 155, 551},
         {"enceinte.non", 1, 193, 551},
 
-        {"pension_alimentaire.separe",          1, 31, 338},
-        {"pension_alimentaire.has_child_alone", 1, 31, 310},
+        {"pension_alimentaire.separe",       1, 31, 338},
+        {"pension_alimentaire.parent_isole", 1, 31, 310},
 
         {"pro.demandeur.sans_activite", 2, 230, 723},
         {"pro.demandeur.sans_activite.volontairement.oui", 2, 230, 708},
@@ -342,9 +339,7 @@ public class RSAFormFiller extends FormFiller {
     private static final EnumMap<IndividuRole, EnumMap<SituationProType, String>> situationsProCheckboxes = new EnumMap<>(IndividuRole.class);
     private static final EnumMap<IndividuRole, EnumMap<SalarieContractType, String>> salarieContractCheckboxes = new EnumMap<>(IndividuRole.class);
 
-    private SituationService situationService;
     private int currentEnfant = 1;
-    private int currentEnfantWithRessources = 1;
 
     public RSAFormFiller() {
         initCiviliteCheckboxes();
@@ -352,7 +347,6 @@ public class RSAFormFiller extends FormFiller {
         initLogementTypeCheckboxes();
         initSituationsProCheckboxes();
         initSalarieContractCheckboxes();
-        situationService = new SituationService();
     }
 
     private void initCiviliteCheckboxes() {
@@ -487,10 +481,6 @@ public class RSAFormFiller extends FormFiller {
         }
 
         fillPensionAlimentaire(demandeur);
-
-        if (null != situation.mobilierValue && 0 != situation.mobilierValue) {
-            appendText("ressources.demandeur.argent_place", String.valueOf(situation.mobilierValue));
-        }
     }
 
     private void fillParent(Individu individu) {
@@ -531,7 +521,6 @@ public class RSAFormFiller extends FormFiller {
         }
 
         fillSituationsPro(individu);
-        fillRessources(individu);
     }
 
     private String getFieldPrefix(IndividuRole role, int enfantIndex) {
@@ -607,40 +596,6 @@ public class RSAFormFiller extends FormFiller {
         }
     }
 
-    private void fillRessources(Individu individu) {
-        String fieldPrefix = getFieldPrefix(individu.role, currentEnfantWithRessources);
-
-        if (IndividuRole.ENFANT == individu.role) {
-            int ressources = situationService.sumAllRessources(individu);
-            if (0 == ressources || currentEnfantWithRessources > 2) {
-                return;
-            }
-        }
-
-        int periodeId = 1;
-        for (RessourcePeriode periode : RessourcePeriode.values()) {
-            if (-1 != periode.minusCurrentMonth) {
-                int sum = situationService.sumAllRessources(individu, periode);
-                if (0 == sum) {
-                    checkbox(String.format("ressources.%s.%d.aucune", fieldPrefix, periodeId));
-                } else {
-                    for (RessourceType ressourceType : RessourceType.values()) {
-                        sum = situationService.sumRessourcesOfType(individu, periode, ressourceType);
-                        if (0 != sum) {
-                            String textField = String.format("ressources.%s.%d.%s", fieldPrefix, periodeId, ressourceType.jsonValue);
-                            appendText(textField, String.valueOf(sum));
-                        }
-                    }
-                }
-                periodeId++;
-            }
-        }
-
-        if (IndividuRole.ENFANT == individu.role) {
-            currentEnfantWithRessources++;
-        }
-    }
-
     private void fillConjoint(Individu conjoint) {
         fillParent(conjoint);
     }
@@ -688,7 +643,6 @@ public class RSAFormFiller extends FormFiller {
             appendText(String.format("enfant.%d.situation", currentEnfant), individu.situation.textValue);
         }
 
-        fillRessources(individu);
         currentEnfant++;
     }
 
@@ -759,7 +713,7 @@ public class RSAFormFiller extends FormFiller {
         }
 
         if (null != demandeur.statutMarital && demandeur.statutMarital.isAlone && childrenNb() > 0) {
-            checkbox("pension_alimentaire.has_child_alone");
+            checkbox("pension_alimentaire.parent_isole");
         }
     }
 

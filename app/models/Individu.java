@@ -36,7 +36,6 @@ public class Individu {
     public Boolean inscritCaf;
     public String numeroAllocataire;
     public List<SituationPro> situationsPro = new ArrayList<>();
-    public List<Ressource> ressources = new ArrayList<>();
 
     @JsonDeserialize(using = CiviliteDeserializer.class)
     public static enum Civilite {

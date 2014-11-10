@@ -16,7 +16,7 @@ public class Ressource {
     public int montant;
     public RessourcePeriode periode;
 
-    @JsonDeserialize(using=RessourceTypeDeserializer.class)
+    @JsonDeserialize(using = RessourceTypeDeserializer.class)
     public static enum RessourceType {
 
         REVENUS_SALARIES("revenusSalarie"),
@@ -70,14 +70,10 @@ public class Ressource {
         }
     }
 
-    @JsonDeserialize(using=RessourcePeriodeDeserializer.class)
+    @JsonDeserialize(using = RessourcePeriodeDeserializer.class)
     public static enum RessourcePeriode {
 
-        MOIS_1(3),
-        MOIS_2(2),
-        MOIS_3(1),
-        ANNEE_MOINS_1,
-        ANNEE_MOINS_2;
+        MOIS_1(3), MOIS_2(2), MOIS_3(1), ANNEE_MOINS_1, ANNEE_MOINS_2;
 
         public final int minusCurrentMonth;
 
@@ -106,10 +102,7 @@ public class Ressource {
 
             for (RessourcePeriode periode : RessourcePeriode.values()) {
                 if (periode.minusCurrentMonth != -1) {
-                    String period = LocalDate
-                            .now()
-                            .withDayOfMonth(1)
-                            .minusMonths(periode.minusCurrentMonth)
+                    String period = LocalDate.now().withDayOfMonth(1).minusMonths(periode.minusCurrentMonth)
                             .toString("YYYY-MM");
                     if (period.equals(text)) {
                         return periode;
@@ -117,7 +110,7 @@ public class Ressource {
                 }
             }
 
-            throw new RuntimeException(String.format("Période invalide : %s", text));
+            return RessourcePeriode.ANNEE_MOINS_1;
         }
     }
 }
