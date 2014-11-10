@@ -11,6 +11,7 @@ import models.Individu.StatutMarital;
 import models.Logement;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -142,28 +143,10 @@ public class AspaFormFiller extends FormFiller {
     }
 
     private void fillDemandeur(Individu demandeur) {
+        fillIndividu(demandeur);
         String civiliteCheckbox = civiliteCheckboxes.get(demandeur.civilite);
         checkbox(civiliteCheckbox);
-        appendText("demandeur.nom", demandeur.lastName);
-        if (null != demandeur.nomUsage) {
-            appendText("demandeur.nom_usage", "Nom d'usage ".concat(demandeur.nomUsage));
-        }
-        appendText("demandeur.prenom", demandeur.firstName);
-        appendNumber("demandeur.date_naissance", demandeur.dateDeNaissance.replaceAll("/", ""));
-        if (Nationalite.FRANCAISE == demandeur.nationalite) {
-            appendText("demandeur.nationalite", "française");
-        }
         appendNumber("demandeur.telephone", situation.phoneNumber);
-        appendText("demandeur.ville_naissance", demandeur.villeNaissance);
-        if (null != demandeur.departementNaissance) {
-            appendText("demandeur.departement_naissance", demandeur.departementNaissance);
-        }
-        appendText("demandeur.pays_naissance", demandeur.paysNaissance);
-
-        if (null != demandeur.nir) {
-            appendNumber("demandeur.nir", demandeur.nir.substring(0, 13));
-            appendNumber("demandeur.nir2", demandeur.nir.substring(13, 15));
-        }
 
         String statutMaritalCheckbox = statutMaritalCheckboxes.get(demandeur.statutMarital);
         checkbox(statutMaritalCheckbox);
@@ -186,23 +169,26 @@ public class AspaFormFiller extends FormFiller {
     }
 
     private void fillConjoint(Individu conjoint) {
-        appendText("conjoint.nom", conjoint.lastName);
-        appendText("conjoint.nom_usage", conjoint.nomUsage);
-        appendText("conjoint.prenom", conjoint.firstName);
-        appendNumber("conjoint.date_naissance", conjoint.dateDeNaissance.replaceAll("/", ""));
-        if (Nationalite.FRANCAISE == conjoint.nationalite) {
-            appendText("conjoint.nationalite", "française");
+        fillIndividu(conjoint);
+    }
+
+    private void fillIndividu(Individu individu) {
+        String role = individu.role.value;
+        appendText(String.format("%s.nom", role), individu.lastName);
+        appendText(String.format("%s.nom_usage", role), individu.nomUsage);
+        appendText(String.format("%s.prenom", role), individu.firstName);
+        appendNumber(String.format("%s.date_naissance", role), individu.dateDeNaissance.replaceAll("/", ""));
+        if (Nationalite.FRANCAISE == individu.nationalite) {
+            appendText(String.format("%s.nationalite", role), "française");
         }
 
-        appendText("conjoint.ville_naissance", conjoint.villeNaissance);
-        if (null != conjoint.departementNaissance) {
-            appendText("conjoint.departement_naissance", String.valueOf(conjoint.departementNaissance));
-        }
-        appendText("conjoint.pays_naissance", conjoint.paysNaissance);
+        appendText(String.format("%s.ville_naissance", role), individu.villeNaissance);
+        appendText(String.format("%s.departement_naissance", role), individu.departementNaissance);
+        appendText(String.format("%s.pays_naissance", role), individu.paysNaissance);
 
-        if (null != conjoint.nir) {
-            appendNumber("conjoint.nir", conjoint.nir.substring(0, 13));
-            appendNumber("conjoint.nir2", conjoint.nir.substring(13, 15));
+        if (StringUtils.length(individu.nir) >= 15) {
+            appendNumber(String.format("%s.nir", role), individu.nir.substring(0, 13));
+            appendNumber(String.format("%s.nir2", role), individu.nir.substring(13, 15));
         }
     }
 
