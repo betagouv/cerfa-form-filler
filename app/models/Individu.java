@@ -1,8 +1,6 @@
 package models;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -35,7 +33,6 @@ public class Individu {
     public boolean enceinte;
     public Boolean inscritCaf;
     public String numeroAllocataire;
-    public List<SituationPro> situationsPro = new ArrayList<>();
 
     @JsonDeserialize(using = CiviliteDeserializer.class)
     public static enum Civilite {

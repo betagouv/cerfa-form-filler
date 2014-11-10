@@ -13,8 +13,6 @@ import models.Logement;
 import models.Logement.Adresse;
 import models.Logement.LogementType;
 import models.Situation;
-import models.SituationPro;
-import models.SituationPro.SituationProType;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.junit.Test;
@@ -163,16 +161,6 @@ public class IntegrationTest {
         individu.etudiant = true;
         individu.inscritCaf = true;
         individu.numeroAllocataire = "1234567";
-
-        SituationPro situationPro = new SituationPro();
-        situationPro.situation = SituationProType.SALARIE;
-        situationPro.since = "12/07/2009";
-        individu.situationsPro.add(situationPro);
-        situationPro = new SituationPro();
-        situationPro.situation = SituationProType.DEMANDEUR_EMPLOI;
-        situationPro.since = "12/07/2012";
-        situationPro.isIndemnise = true;
-        individu.situationsPro.add(situationPro);
     }
 
     private void fillEnfant(Individu enfant) {

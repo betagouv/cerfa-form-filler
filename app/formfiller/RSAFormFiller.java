@@ -9,9 +9,6 @@ import models.Individu.Nationalite;
 import models.Individu.StatutMarital;
 import models.Logement.Adresse;
 import models.Logement.LogementType;
-import models.SituationPro;
-import models.SituationPro.SalarieContractType;
-import models.SituationPro.SituationProType;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -336,8 +333,6 @@ public class RSAFormFiller extends FormFiller {
     private static final EnumMap<IndividuRole, EnumMap<Civilite, String>> civiliteCheckboxes = new EnumMap<>(IndividuRole.class);
     private static final EnumMap<IndividuRole, EnumMap<Nationalite, String>> nationaliteCheckboxes = new EnumMap<>(IndividuRole.class);
     private static final EnumMap<LogementType, String> logementTypeCheckboxes = new EnumMap<>(LogementType.class);
-    private static final EnumMap<IndividuRole, EnumMap<SituationProType, String>> situationsProCheckboxes = new EnumMap<>(IndividuRole.class);
-    private static final EnumMap<IndividuRole, EnumMap<SalarieContractType, String>> salarieContractCheckboxes = new EnumMap<>(IndividuRole.class);
 
     private int currentEnfant = 1;
 
@@ -345,8 +340,6 @@ public class RSAFormFiller extends FormFiller {
         initCiviliteCheckboxes();
         initNationaliteCheckboxes();
         initLogementTypeCheckboxes();
-        initSituationsProCheckboxes();
-        initSalarieContractCheckboxes();
     }
 
     private void initCiviliteCheckboxes() {
@@ -379,48 +372,6 @@ public class RSAFormFiller extends FormFiller {
         logementTypeCheckboxes.put(LogementType.LOCATAIRE, "logement.locataire");
         logementTypeCheckboxes.put(LogementType.PAYANT, "logement.payant");
         logementTypeCheckboxes.put(LogementType.GRATUIT, "logement.gratuit");
-    }
-
-    private void initSituationsProCheckboxes() {
-        EnumMap<SituationProType, String> demandeurCheckboxes = new EnumMap<>(SituationProType.class);
-        situationsProCheckboxes.put(IndividuRole.DEMANDEUR, demandeurCheckboxes);
-        demandeurCheckboxes.put(SituationProType.SALARIE, "pro.demandeur.salarie");
-        demandeurCheckboxes.put(SituationProType.SANS_ACTIVITE, "pro.demandeur.sans_activite");
-        demandeurCheckboxes.put(SituationProType.INDEPENDANT, "pro.demandeur.independant");
-        demandeurCheckboxes.put(SituationProType.TRAVAILLEUR_SAISONNIER, "pro.demandeur.travailleur_saisonnier");
-        demandeurCheckboxes.put(SituationProType.APPRENTI, "pro.demandeur.apprenti");
-        demandeurCheckboxes.put(SituationProType.STAGIAIRE, "pro.demandeur.stagiaire");
-        demandeurCheckboxes.put(SituationProType.GERANT_SALARIE, "pro.demandeur.gerant_salarie");
-        demandeurCheckboxes.put(SituationProType.DEMANDEUR_EMPLOI, "pro.demandeur.demandeur_emploi");
-        demandeurCheckboxes.put(SituationProType.ETUDIANT, "pro.demandeur.etudiant");
-        demandeurCheckboxes.put(SituationProType.RETRAITE, "pro.demandeur.retraite");
-
-        EnumMap<SituationProType, String> conjointCheckboxes = new EnumMap<>(SituationProType.class);
-        situationsProCheckboxes.put(IndividuRole.CONJOINT, conjointCheckboxes);
-        conjointCheckboxes.put(SituationProType.SALARIE, "pro.conjoint.salarie");
-        conjointCheckboxes.put(SituationProType.SANS_ACTIVITE, "pro.conjoint.sans_activite");
-        conjointCheckboxes.put(SituationProType.INDEPENDANT, "pro.conjoint.independant");
-        conjointCheckboxes.put(SituationProType.TRAVAILLEUR_SAISONNIER, "pro.conjoint.travailleur_saisonnier");
-        conjointCheckboxes.put(SituationProType.APPRENTI, "pro.conjoint.apprenti");
-        conjointCheckboxes.put(SituationProType.STAGIAIRE, "pro.conjoint.stagiaire");
-        conjointCheckboxes.put(SituationProType.GERANT_SALARIE, "pro.conjoint.gerant_salarie");
-        conjointCheckboxes.put(SituationProType.DEMANDEUR_EMPLOI, "pro.conjoint.demandeur_emploi");
-        conjointCheckboxes.put(SituationProType.ETUDIANT, "pro.conjoint.etudiant");
-        conjointCheckboxes.put(SituationProType.RETRAITE, "pro.conjoint.retraite");
-    }
-
-    private void initSalarieContractCheckboxes() {
-        EnumMap<SalarieContractType, String> demandeurCheckboxes = new EnumMap<>(SalarieContractType.class);
-        salarieContractCheckboxes.put(IndividuRole.DEMANDEUR, demandeurCheckboxes);
-        demandeurCheckboxes.put(SalarieContractType.CDI, "pro.demandeur.salarie.contrat.cdi");
-        demandeurCheckboxes.put(SalarieContractType.CDD, "pro.demandeur.salarie.contrat.cdd");
-        demandeurCheckboxes.put(SalarieContractType.INTERIM, "pro.demandeur.salarie.contrat.interim");
-
-        EnumMap<SalarieContractType, String> conjointCheckboxes = new EnumMap<>(SalarieContractType.class);
-        salarieContractCheckboxes.put(IndividuRole.CONJOINT, conjointCheckboxes);
-        conjointCheckboxes.put(SalarieContractType.CDI, "pro.conjoint.salarie.contrat.cdi");
-        conjointCheckboxes.put(SalarieContractType.CDD, "pro.conjoint.salarie.contrat.cdd");
-        conjointCheckboxes.put(SalarieContractType.INTERIM, "pro.conjoint.salarie.contrat.interim");
     }
 
     @Override
@@ -519,8 +470,6 @@ public class RSAFormFiller extends FormFiller {
                 checkbox(String.format("%s.inscrit_caf.non", fieldPrefix));
             }
         }
-
-        fillSituationsPro(individu);
     }
 
     private String getFieldPrefix(IndividuRole role, int enfantIndex) {
@@ -545,55 +494,6 @@ public class RSAFormFiller extends FormFiller {
 
     private String getFieldPrefix(IndividuRole role) {
         return getFieldPrefix(role, 0);
-    }
-
-    private void fillSituationsPro(Individu individu) {
-        boolean isDemandeurEmploi = false;
-        String fieldPrefix = getFieldPrefix(individu.role);
-
-        for (SituationPro situationPro : individu.situationsPro) {
-            String situationProCheckbox = situationsProCheckboxes.get(individu.role).get(situationPro.situation);
-            checkbox(situationProCheckbox);
-            if (null != situationProCheckbox) {
-                appendText(situationProCheckbox + ".since", situationPro.since);
-            }
-
-            switch (situationPro.situation) {
-            case STAGIAIRE:
-                if (null != situationPro.isRemunere) {
-                    String checkboxRemunere = String.format("pro.%s.stagiaire.remunere.%s", fieldPrefix, (situationPro.isRemunere ? "oui" : "non"));
-                    checkbox(checkboxRemunere);
-                }
-                break;
-            case SALARIE:
-                String checkboxContrat = salarieContractCheckboxes.get(individu.role).get(situationPro.contractType);
-                checkbox(checkboxContrat);
-                break;
-            case GERANT_SALARIE:
-                appendText(String.format("pro.%s.gerant_salarie.affiliation", fieldPrefix), situationPro.gerantSalarieAffiliation);
-                break;
-            case DEMANDEUR_EMPLOI:
-                isDemandeurEmploi = true;
-                if (null != situationPro.isIndemnise) {
-                    String checkboxIndemnise = String.format("pro.%s.demandeur_emploi.indemnise.%s", fieldPrefix, (situationPro.isIndemnise ? "oui" : "non"));
-                    checkbox(checkboxIndemnise);
-                    if (situationPro.isIndemnise) {
-                        appendText(String.format("pro.%s.demandeur_emploi.indemnise_since", fieldPrefix), situationPro.indemniseSince);
-                    }
-                }
-            case SANS_ACTIVITE:
-                if (null != situationPro.volontairementSansActivite) {
-                    String checkboxSansActivite = String.format("pro.%s.sans_activite.volontairement.%s", fieldPrefix, (situationPro.volontairementSansActivite ? "oui" : "non"));
-                    checkbox(checkboxSansActivite);
-                }
-            default:
-                break;
-            }
-        }
-
-        if (!isDemandeurEmploi) {
-            checkbox(String.format("pro.%s.demandeur_emploi.non", fieldPrefix));
-        }
     }
 
     private void fillConjoint(Individu conjoint) {
