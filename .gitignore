@@ -17,3 +17,5 @@ server.pid
 .cache
 /heroku
 /.settings/
+/.idea/workspace.xml
+/.idea/libraries
