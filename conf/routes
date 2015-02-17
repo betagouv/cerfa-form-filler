@@ -5,4 +5,5 @@
 POST     /form/:formId                  controllers.Application.generate(formId)
 GET      /form-fake/:formId             controllers.Application.generateFake(formId)
 GET      /impact-fake                   controllers.ImpactController.generateFake()
+POST     /impact                        controllers.ImpactController.generateFake()
 OPTIONS  /*anyroute                     controllers.Application.options(anyroute)
