@@ -84,8 +84,8 @@ public class ImpactFormFiller extends FormFiller{
             {"vieQuotidienne.besoinsDeplacement.transports",             4, 318, 292},
             {"vieQuotidienne.besoinsDeplacement.public",                 4, 56, 272},
             {"vieQuotidienne.besoinsDeplacement.vacances",               4, 318, 272},
-            {"besoin.deplacement.transports.oui",                        4, 405, 240},
-            {"besoin.deplacement.transports.non",                        4, 460, 240},
+            {"vieQuotidienne.besoinsTransports.true",                    4, 405, 240},
+            {"vieQuotidienne.besoinsTransports.false",                   4, 460, 240},
             {"vieQuotidienne.besoinsDeplacement.autre",                  4, 56, 215},
 
             {"vieQuotidienne.besoinsSocial.communication",               4, 56, 140},
@@ -113,9 +113,9 @@ public class ImpactFormFiller extends FormFiller{
             {"attente.structure2.oui",                                   5, 440, 432},
             {"attente.structure2.non",                                   5, 495, 432},
 
-            {"attente.stationnement",                                    5, 90, 340},
-            {"attente.invalidite",                                       5, 337, 340},
-            {"attente.aucune",                                           5, 90, 300},
+            {"vieQuotidienne.attentesCarte.stationnement",               5, 90, 340},
+            {"vieQuotidienne.attentesCarte.invalidite",                  5, 337, 340},
+            {"vieQuotidienne.attentesCarte.aucune",                      5, 90, 300},
 
             {"vie_quotidienne.justificatifs",                            6, 55, 312},
             {"vie_quotidienne.reduction_activite_pro",                   6, 55, 280},
