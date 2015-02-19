@@ -5,7 +5,7 @@ import pdfwriter.PdfWriter;
 
 public abstract class FormFiller {
 
-    private PdfWriter writer;
+    protected PdfWriter writer;
     protected Situation situation;
 
     public void setWriter(PdfWriter writer) {
