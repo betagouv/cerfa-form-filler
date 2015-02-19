@@ -481,11 +481,11 @@ public class ImpactFormFiller extends FormFiller {
 
         {"dossier.formation.date", 1, 335, 613, 8, 14f},
 
-        {"demandeur.date_naissance", 1, 446, 350, 8, 14f},
+        {"identite.birthDate", 1, 446, 350, 8, 14f},
         {"demandeur.lieu_naissance.code_postal", 1, 440, 308, 5, 9f},
         {"demandeur.etranger.date_arrivee", 1, 445, 267, 8, 14f},
 
-        {"demandeur.adresse.code_postal", 1, 440, 225, 5, 9f},
+        {"identite.code_postal", 1, 440, 225, 5, 9f},
 
         {"demandeur.telephone.1", 1, 167, 180, 10, 9f},
         {"demandeur.telephone.2", 1, 410, 180, 10, 9f},
@@ -610,6 +610,7 @@ public class ImpactFormFiller extends FormFiller {
             if (null == jsonValue) {
                 continue;
             }
+            writeCheckbox(checkbox);
 
             String value = jsonValue.textValue();
             Logger.info("Checkbox : " + value);
@@ -623,6 +624,17 @@ public class ImpactFormFiller extends FormFiller {
             }
             appendText(textFieldIndex, jsonValue.asText());
             Logger.info("TextField : " + jsonValue.asText());
+        }
+
+        for (Object[] numberfield : numberFields) {
+
+            String numberFieldIndex = numberfield[0].toString();
+            JsonNode jsonValue = json.findValue(numberFieldIndex);
+            if (null == jsonValue) {
+                continue;
+            }
+            appendNumber(numberFieldIndex, jsonValue.asText());
+            Logger.info("NumberField : " + jsonValue.asText());
         }
     }
 
