@@ -233,7 +233,7 @@ public class CmuFormFiller extends FormFiller {
         if (null != enfant.lienParente) {
             appendText(String.format("enfant.%d.lien_parente", currentChildIndex), enfant.lienParente.textValue);
         }
-        if (Boolean.TRUE == enfant.residenceAlternee) {
+        if (Boolean.TRUE == enfant.gardeAlternee) {
             checkbox(String.format("enfant.%d.residence_alternee", currentChildIndex));
         }
         appendNumber(String.format("enfant.%d.date_naissance", currentChildIndex), enfant.dateDeNaissance.replaceAll("/", ""));

@@ -21,7 +21,7 @@ public class Individu {
     public String departementNaissance;
     public Nationalite nationalite;
     public LienParente lienParente;
-    public Boolean residenceAlternee;
+    public Boolean gardeAlternee;
     public String dateArriveeFoyer;
     public IndividuRole role;
     public StatutMarital statutMarital;
