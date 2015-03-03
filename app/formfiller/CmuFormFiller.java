@@ -97,8 +97,6 @@ public class CmuFormFiller extends FormFiller {
     private static final EnumMap<StatutMarital, String> statutMaritalCheckboxes = new EnumMap<>(StatutMarital.class);
     private static final EnumMap<Nationalite, String> nationalitesEnfants = new EnumMap<>(Nationalite.class);
 
-    private int currentChildIndex = 1;
-
     public CmuFormFiller() {
         initNationaliteCheckboxes();
         initStatutMaritalCheckboxes();
@@ -156,13 +154,15 @@ public class CmuFormFiller extends FormFiller {
 
     @Override
     public void fill() {
+        int childIndex = 1;
         for (Individu individu : situation.individus) {
             if (individu.role == IndividuRole.DEMANDEUR) {
                 fillDemandeur(individu);
             } else if (individu.role == IndividuRole.CONJOINT) {
                 fillConjoint(individu);
             } else if (individu.role == IndividuRole.ENFANT) {
-                fillEnfant(individu);
+                fillEnfant(individu, childIndex);
+                childIndex++;
             }
         }
 
@@ -222,24 +222,22 @@ public class CmuFormFiller extends FormFiller {
         checkbox(nationaliteCheckbox);
     }
 
-    private void fillEnfant(Individu enfant) {
+    private void fillEnfant(Individu enfant, int childIndex) {
         String nomPrenom = null;
         if (null != enfant.firstName && null != enfant.lastName) {
             nomPrenom = String.format("%s %s", enfant.lastName, enfant.firstName);
         }
-        appendText(String.format("enfant.%d.nom", currentChildIndex), nomPrenom);
+        appendText(String.format("enfant.%d.nom", childIndex), nomPrenom);
 
-        appendText(String.format("enfant.%d.nationalite", currentChildIndex), nationalitesEnfants.get(enfant.nationalite));
+        appendText(String.format("enfant.%d.nationalite", childIndex), nationalitesEnfants.get(enfant.nationalite));
         if (null != enfant.lienParente) {
-            appendText(String.format("enfant.%d.lien_parente", currentChildIndex), enfant.lienParente.textValue);
+            appendText(String.format("enfant.%d.lien_parente", childIndex), enfant.lienParente.textValue);
         }
         if (Boolean.TRUE == enfant.gardeAlternee) {
-            checkbox(String.format("enfant.%d.residence_alternee", currentChildIndex));
+            checkbox(String.format("enfant.%d.residence_alternee", childIndex));
         }
-        appendNumber(String.format("enfant.%d.date_naissance", currentChildIndex), enfant.dateDeNaissance.replaceAll("/", ""));
-        appendNumber(String.format("enfant.%d.nir", currentChildIndex), enfant.nir);
-
-        currentChildIndex++;
+        appendNumber(String.format("enfant.%d.date_naissance", childIndex), enfant.dateDeNaissance.replaceAll("/", ""));
+        appendNumber(String.format("enfant.%d.nir", childIndex), enfant.nir);
     }
 
     private void fillLogement(Logement logement) {
