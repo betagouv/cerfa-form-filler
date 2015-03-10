@@ -39,6 +39,7 @@ public class Ressource {
         INDEMNITES_VOLONTARIAT("indVolontariat"),
         DEDOMMAGEMENT_AMIANTE("dedommagementAmiante"),
         PENSIONS_ALIMENTAIRES("pensionsAlimentaires"),
+        PENSIONS_ALIMENTAIRES_VERSEES("pensionsAlimentairesVersees"),
         PRESTATION_COMPENSATOIRE("prestationCompensatoire"),
         RETRAITES_RENTES("pensionsRetraitesRentes"),
         RETRAITE_COMBATTANT("retraiteCombattant"),

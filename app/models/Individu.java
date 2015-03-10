@@ -125,11 +125,11 @@ public class Individu {
         PACS("pacs", false),
         RELATION_LIBRE("relation_libre", false),
         CELIBATAIRE("celibataire"),
-        VEUF("veuf"),
         SEPARE("separe"),
         DIVORCE("divorce"),
-        CONCUBINAGE_ROMPU("concubinage_rompu"),
-        PACS_ROMPU("pacs_rompu");
+        VEUF("veuf"),
+        PACS_ROMPU("pacs_rompu"),
+        CONCUBINAGE_ROMPU("concubinage_rompu");
 
         public final String jsonValue;
         public final boolean isAlone;
